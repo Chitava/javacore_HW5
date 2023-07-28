@@ -1,35 +1,41 @@
 import java.io.*;
 
 public class xo {
-    public static String makeString (String path) throws IOException {
+    public static String makeString(String path) throws IOException {
 
         try (BufferedInputStream stream = new BufferedInputStream(new FileInputStream(path))) {
             return new String(stream.readAllBytes());
         }
     }
 
-    public static void writeFile (String pathField, String pathResult) throws IOException {
-        String string = makeString(pathField);
+    public static void writeFile(String pathField, String pathResult) throws IOException {
+        int field = Integer.parseInt(makeString(pathField));
         StringBuilder result = new StringBuilder();
-        for (int i = 0; i < string.length(); i++) {
-            char field = string.charAt(i);
-            switch (field){
-                case '0': {
-                    result.append("_");
+        int symbol;
+        while (field > 0) {
+            symbol = field % 10;
+            field = field / 10;
+            switch (symbol) {
+                case 0: {
+                    result.append("•");
                     break;
                 }
-                case '1':{
+                case 1: {
                     result.append("X");
                     break;
                 }
-                case '2':{
+                case 2: {
                     result.append("0");
                     break;
                 }
             }
         }
-        try (FileWriter writer = new FileWriter(pathResult)){
+        result.reverse();
+        try (FileWriter writer = new FileWriter(pathResult)) {
             writer.write(String.valueOf(result));
+        } catch (Exception e) {
+            throw new RuntimeException();
         }
     }
+
 }
